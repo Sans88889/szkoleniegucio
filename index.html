@@ -1,35 +1,185 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Strona testowa</title>
-        <style>
-            .sekcjaWojtków {
-display: flex;
-justify-content: space-between;
-text-shadow: #ff00ea 2px 2px 3px;
+Napisz funkcję, której zadaniem będzie formatowanie czasu na ekranie w formacie HH::MM:SS (godziny, minuty, sekundy, 2 znaki na każdą pozycję). Funkcja powinna przyjmować jako argument liczbę całkowitą wyrażającą czas jaki upłynął od godzinny 00:00:00 w samych sekundach np.: dla 332 wypisze 00:05:32.
 
+<code>
+    using System;
 
+public class TimeFormatter
+{
+    public static string FormatTime(int seconds)
+    {
+        int hours = seconds / 3600;
+        int minutes = (seconds % 3600) / 60;
+        int remainingSeconds = seconds % 60;
 
-
-
+        string formattedTime = $"{hours:D2}:{minutes:D2}:{remainingSeconds:D2}";
+        return formattedTime;
     }
-        </style>
-    </head>
-    <body>
-        <h1>To moja pierwsza strona testowa</h1>
-        
-        <div class="sekcjaWojtków">
-        <section>
-            <h2><b>lewa strona testowa</b></h2>
-<h3><b>strona testowa</b> </h3>
-<p><i>To nasz robo taniec</i></p>\
-<img src="robotaniec.jpg" alt="SandraKupa">
- </section>
- <section>
-      
-    <h2>prawa strona testowa</h2>
-    
-        </section>
-    </div>
-    </body>
-</html>
+
+    public static void Main()
+    {
+        int timeInSeconds = 332;
+        string formattedTime = FormatTime(timeInSeconds);
+        Console.WriteLine(formattedTime);
+    }
+}
+</code>
+
+Napisz funkcję obliczającą i zwracającą długość odcinka w układzie kartezjańskim dwuwymiarowym. Argumentami tej funkcji powinny być współrzędne punktów końca i początku (liczby rzeczywiste).
+<code>
+using System;
+
+public class LineLengthCalculator
+{
+    public static double CalculateLength(double x1, double y1, double x2, double y2)
+    {
+        double deltaX = x2 - x1;
+        double deltaY = y2 - y1;
+        double length = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+        return length;
+    }
+
+    public static void Main()
+    {
+        double x1 = 1.5;
+        double y1 = 2.3;
+        double x2 = 4.7;
+        double y2 = 6.1;
+
+        double length = CalculateLength(x1, y1, x2, y2);
+        Console.WriteLine($"Długość odcinka: {length}");
+    }
+}
+</code>
+
+Napisz funkcję wyznaczającą i zwracającą medianę z liczb całkowitych zebranych w tablicy dowolnej długości. Funkcję napisz tak, aby nie modyfikowała porządku liczb w tablicy, która zostanie jej przekazana. Przyjmij, że istnieje z góry zdany maksymalny rozmiar tablicy – 100 elementów.
+
+<code>
+using System;
+
+public class MedianCalculator
+{
+    public static double CalculateMedian(int[] numbers)
+    {
+        int length = numbers.Length;
+        Array.Sort(numbers);
+
+        if (length % 2 == 0)
+        {
+            int midIndex1 = length / 2 - 1;
+            int midIndex2 = length / 2;
+            double median = (numbers[midIndex1] + numbers[midIndex2]) / 2.0;
+            return median;
+        }
+        else
+        {
+            int midIndex = length / 2;
+            double median = numbers[midIndex];
+            return median;
+        }
+    }
+
+    public static void Main()
+    {
+        int[] array = { 5, 1, 9, 3, 7 };
+        double median = CalculateMedian(array);
+        Console.WriteLine($"Mediana: {median}");
+    }
+}
+</code>
+
+Napisz funkcję wyznaczającą i zwracającą medianę z liczb całkowitych zebranych w tablicy dowolnej długości. Funkcję napisz tak, aby nie modyfikowała porządku liczb w tablicy, która zostanie jej przekazana. Przyjmij, że istnieje z góry zdany maksymalny rozmiar tablicy – 100 elementów.
+<code>
+     using System;
+
+public class MedianCalculator
+{
+    public static double CalculateMedian(int[] numbers, int length)
+    {
+        int[] sortedArray = new int[length];
+        Array.Copy(numbers, sortedArray, length);
+        Array.Sort(sortedArray);
+
+        if (length % 2 == 0)
+        {
+            int midIndex1 = length / 2 - 1;
+            int midIndex2 = length / 2;
+            double median = (sortedArray[midIndex1] + sortedArray[midIndex2]) / 2.0;
+            return median;
+        }
+        else
+        {
+            int midIndex = length / 2;
+            double median = sortedArray[midIndex];
+            return median;
+        }
+    }
+
+    public static void Main()
+    {
+        int[] array = { 5, 1, 9, 3, 7 };
+        int length = array.Length;
+        double median = CalculateMedian(array, length);
+        Console.WriteLine($"Mediana: {median}");
+    }
+}
+</code>
+
+zad 4.
+
+<code>
+using System;
+
+public class ClosestRowsFinder
+{
+    public static void FindClosestRows(int[,] matrix)
+    {
+        int numRows = matrix.GetLength(0);
+        int minDiff = int.MaxValue;
+        int closestRow1 = 0;
+        int closestRow2 = 0;
+
+        for (int i = 0; i < numRows - 1; i++)
+        {
+            for (int j = i + 1; j < numRows; j++)
+            {
+                int diff = CalculateRowDifference(matrix, i, j);
+                if (diff < minDiff)
+                {
+                    minDiff = diff;
+                    closestRow1 = i;
+                    closestRow2 = j;
+                }
+            }
+        }
+
+        Console.WriteLine($"Najbardziej zbliżone wiersze: {closestRow1} i {closestRow2}");
+    }
+
+    private static int CalculateRowDifference(int[,] matrix, int row1, int row2)
+    {
+        int numCols = matrix.GetLength(1);
+        int difference = 0;
+
+        for (int k = 0; k < numCols; k++)
+        {
+            int element1 = matrix[row1, k];
+            int element2 = matrix[row2, k];
+            difference += (element1 - element2) * (element1 - element2);
+        }
+
+        return difference;
+    }
+
+    public static void Main()
+    {
+        int[,] matrix = {
+            { 1, 2, 3 },
+            { 4, 2, 6 },
+            { 7, 8, 9 },
+            { 10, 11, 12 }
+        };
+
+        FindClosestRows(matrix);
+    }
+}
+</code>
